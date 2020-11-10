@@ -150,7 +150,7 @@ export const useWeb3 = (endpoint) => {
       const signer = provider.getSigner()
       web3Dispatch({ type: 'SET_signer', signer: signer })
     }
-  }, [web3State.account])
+  }, [web3State.account, web3State.chain_id])
 
   // GET netword_name and chain_id
   useEffect(() => {
