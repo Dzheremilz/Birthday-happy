@@ -47,6 +47,7 @@ function App() {
       <Text>MetaMask installed: {web3State.is_metamask ? 'yes' : 'no'}</Text>
       <Text>logged: {web3State.is_logged ? 'yes' : 'no'}</Text>
       <Text>{web3State.account}</Text>
+      <Text>Balance: {web3State.balance}</Text>
       {!web3State.is_logged && (
         <>
           <Button onClick={login}>login</Button>
