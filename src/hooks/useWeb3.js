@@ -152,23 +152,31 @@ export const useWeb3 = (endpoint) => {
       web3Dispatch({ type: 'SET_provider', provider: provider })
       const signer = provider.getSigner()
       web3Dispatch({ type: 'SET_signer', signer: signer })
+    } else {
+      web3Dispatch({
+        type: 'SET_provider',
+        provider: web3InitialState.provider,
+      })
+      web3Dispatch({ type: 'SET_signer', signer: web3InitialState.signer })
     }
   }, [web3State.account, web3State.chain_id])
 
   // Get ETH()
   useEffect(() => {
     ;(async () => {
-      if (web3State.provider) {
+      console.log('provider:', web3State.provider)
+      if (
+        web3State.provider &&
+        web3State.account !== web3InitialState.account
+      ) {
         const _balance = await web3State.provider.getBalance(web3State.account)
         const balance = ethers.utils.formatEther(_balance)
-        if (web3State.account !== web3InitialState.account) {
-          web3Dispatch({ type: 'SET_balance', balance: balance })
-        } else {
-          web3Dispatch({
-            type: 'SET_balance',
-            balance: web3InitialState.balance,
-          })
-        }
+        web3Dispatch({ type: 'SET_balance', balance: balance })
+      } else {
+        web3Dispatch({
+          type: 'SET_balance',
+          balance: web3InitialState.balance,
+        })
       }
     })()
   }, [web3State.provider, web3State.account])
@@ -191,7 +199,7 @@ export const useWeb3 = (endpoint) => {
         }
       }
       web3State.provider.on('block', updateBalance)
-      return () => web3State.provider.removeListener('block', updateBalance)
+      return () => web3State.provider.off('block', updateBalance)
     }
   }, [web3State.provider, web3State.account])
 

@@ -1,7 +1,26 @@
 export const SimpleStorage_address =
-  '0x4722EFa196E09d404fBCC346A9cF627B5910df84'
+  '0x03BAEe1A81acDCBA8e09e162233110ac1BF3cFBf'
 
 export const SimpleStorage_abi = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'StorageSet',
+    type: 'event',
+  },
   {
     inputs: [
       {
