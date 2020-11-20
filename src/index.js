@@ -5,7 +5,6 @@ import { ChakraProvider, theme } from '@chakra-ui/core'
 import 'focus-visible/dist/focus-visible'
 import { Web3Provider } from './hooks/useWeb3'
 import App from './App'
-
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme} resetCSS={true}>

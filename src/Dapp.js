@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Text, Button, VStack, HStack, Input } from '@chakra-ui/core'
+import { Text, Button, VStack, HStack, Input, useToast } from '@chakra-ui/core'
 import { ethers } from 'ethers'
 import { Web3Context } from './hooks/useWeb3'
 import { SimpleStorageContext } from './App'
@@ -7,48 +7,55 @@ import { SimpleStorageContext } from './App'
 function Dapp() {
   const [web3State, login] = useContext(Web3Context)
   const simpleStorage = useContext(SimpleStorageContext)
+  const toast = useToast()
+
   const [getValue, setGetValue] = useState(0)
   const [inputValue, setInputValue] = useState(0)
 
-  const handleOnClickGet = async () => {
-    const res = await simpleStorage.get()
-    setGetValue(res.toString())
-  }
+  useEffect(() => {
+    ;(async () => {
+      if (simpleStorage) {
+        const cb = (from, value) => {
+          toast({
+            position: 'bottom',
+            title: `SET`,
+            description: `set value: ${value} by ${from}`,
+            status: 'success',
+            duration: 10000,
+            isClosable: true,
+          })
+        }
+        simpleStorage.on('StorageSet', cb)
+        return () => simpleStorage.off('StorageSet', cb)
+      }
+    })()
+  }, [simpleStorage, toast])
 
-  const handleOnClickSet = async () => {
+  const handleOnClickGet = async () => {
     try {
-      const tx = await simpleStorage.set(inputValue)
-      const evListener = (from, value) => {
-        setGetValue(value.toString())
-        //simpleStorage.off('StorageSet', evListener)
-      }
-      simpleStorage.once('StorageSet', evListener)
+      const res = await simpleStorage.get()
+      setGetValue(res.toString())
     } catch (e) {
-      if (e.code === 4001) {
-        console.log('WHAT UP')
-      }
       console.log(e.message)
     }
   }
 
-  /*
-    useEffect(() => {
-      if (web3State.signer !== null) {
-        setSimpleStorage(
-          new ethers.Contract(
-            SimpleStorage_address,
-            SimpleStorage_abi,
-            web3State.signer
-          )
-        )
-      }
-    }, [web3State.signer])
-    */
+  const handleOnClickSet = async () => {
+    console.log('nb listeners:', simpleStorage.listenerCount('StorageSet'))
+    try {
+      const tx = await simpleStorage.set(inputValue)
 
-  // web3State.is_web3 ??
-  // web3State.is_logged ??
-  // web3State.chain_id ??
-  // web3Sate.account && provider et signer
+      const cb = (_from, value) => {
+        setGetValue(value.toString())
+      }
+      const filter = simpleStorage.filters.StorageSet(web3State.account, null)
+
+      // Ecoute une fois event StorageSet
+      simpleStorage.once(filter, cb)
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
   return (
     <>
@@ -64,7 +71,7 @@ function Dapp() {
           <Button onClick={login}>login</Button>
         </>
       )}
-      {simpleStorage !== null && web3State.chain_id === 4 && (
+      {simpleStorage && web3State.chain_id === 4 && (
         <>
           <HStack>
             <Button onClick={handleOnClickGet}>GET</Button>
