@@ -161,7 +161,7 @@ export const useWeb3 = (endpoint) => {
     }
   }, [web3State.account, web3State.chain_id])
 
-  // Get ETH()
+  // Get ETH amount
   useEffect(() => {
     ;(async () => {
       console.log('provider:', web3State.provider)
@@ -184,9 +184,12 @@ export const useWeb3 = (endpoint) => {
   // Listen for balance change for webState.account
   useEffect(() => {
     if (web3State.provider) {
+      console.log('USEFFECT FOR BALANCE CHANGE')
       console.log('typeof account:', typeof web3State.account)
       console.log('account: ', web3State.account)
+
       const updateBalance = async (_blockNumber) => {
+        console.log('NEW BLOCK MINED')
         const _balance = await web3State.provider.getBalance(web3State.account)
         const balance = ethers.utils.formatEther(_balance)
         if (web3State.account !== web3InitialState.account) {
@@ -198,7 +201,9 @@ export const useWeb3 = (endpoint) => {
           })
         }
       }
+
       web3State.provider.on('block', updateBalance)
+
       return () => web3State.provider.off('block', updateBalance)
     }
   }, [web3State.provider, web3State.account])

@@ -16,7 +16,6 @@ function Dapp() {
   }
 
   const handleOnClickSet = async () => {
-    console.log('nb listener:', await simpleStorage.listenerCount('StorageSet'))
     try {
       const tx = await simpleStorage.set(inputValue)
       const evListener = (from, value) => {
