@@ -3,7 +3,7 @@ import {
   SimpleStorage_address,
   SimpleStorage_abi,
 } from './contracts/SimpleStorage'
-import { useContract } from './hooks/useContract'
+import { useContract } from 'web3-hooks'
 import Dapp from './Dapp'
 
 export const SimpleStorageContext = React.createContext(null)

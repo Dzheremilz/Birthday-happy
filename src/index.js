@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
-import { ChakraProvider, theme } from '@chakra-ui/core'
+import { ChakraProvider, theme } from '@chakra-ui/react'
 import 'focus-visible/dist/focus-visible'
-import { Web3Provider } from './hooks/useWeb3'
+import { Web3Provider } from 'web3-hooks'
 import App from './App'
 ReactDOM.render(
   <React.StrictMode>

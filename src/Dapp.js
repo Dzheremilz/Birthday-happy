@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Text, Button, VStack, HStack, Input, useToast } from '@chakra-ui/core'
+import { Text, Button, VStack, HStack, Input, useToast } from '@chakra-ui/react'
 import { ethers } from 'ethers'
-import { Web3Context } from './hooks/useWeb3'
+import { Web3Context } from 'web3-hooks'
 import { SimpleStorageContext } from './App'
 
 function Dapp() {
