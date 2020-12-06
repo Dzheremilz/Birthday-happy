@@ -12655,10 +12655,10 @@ web-vitals@^0.2.4:
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-0.2.4.tgz#ec3df43c834a207fd7cdefd732b2987896e08511"
   integrity sha512-6BjspCO9VriYy12z356nL6JBS0GYeEcA457YyRzD+dD6XYCQ75NKhcOHUMHentOE7OcVCIXXDvOm0jKFfQG2Gg==
 
-web3-hooks@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/web3-hooks/-/web3-hooks-1.0.1.tgz#6007e6748bbb13cd2280dbb81898c677cc650908"
-  integrity sha512-5IyhVegaEMc3+9qRtIOwcU8c5840N8kPwfBndk+doYS0V+FsK50RAhUbMQyneARmlQ6sgXYvBAvMgcZEaaAVLw==
+web3-hooks@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/web3-hooks/-/web3-hooks-1.0.2.tgz#93029705ddee6c17b685f571b3f1e917d33581a8"
+  integrity sha512-P48135hIYuem4wCF0mi0RKPtK+x60ieds/3ZziB9QxS/81PG57Iv3tZdHKiM72HTY0yqkWAPJrJkWulE8oTfcg==
   dependencies:
     ethers "^5.0.23"
 

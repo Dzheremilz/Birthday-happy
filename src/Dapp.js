@@ -61,19 +61,19 @@ function Dapp() {
 
   return (
     <>
-      <Text>Web3: {web3State.is_web3 ? 'injected' : 'no-injected'}</Text>
-      <Text>Network id: {web3State.chain_id}</Text>
-      <Text>Network name: {web3State.network_name}</Text>
-      <Text>MetaMask installed: {web3State.is_metamask ? 'yes' : 'no'}</Text>
-      <Text>logged: {web3State.is_logged ? 'yes' : 'no'}</Text>
+      <Text>Web3: {web3State.isWeb3 ? 'injected' : 'no-injected'}</Text>
+      <Text>Network id: {web3State.chainId}</Text>
+      <Text>Network name: {web3State.networkName}</Text>
+      <Text>MetaMask installed: {web3State.isMetaMask ? 'yes' : 'no'}</Text>
+      <Text>logged: {web3State.isLogged ? 'yes' : 'no'}</Text>
       <Text>{web3State.account}</Text>
       <Text>Balance: {web3State.balance}</Text>
-      {!web3State.is_logged && (
+      {!web3State.isLogged && (
         <>
           <Button onClick={login}>login</Button>
         </>
       )}
-      {simpleStorage && web3State.chain_id === 4 && (
+      {simpleStorage && web3State.chainId === 4 && (
         <>
           <HStack>
             <Button onClick={handleOnClickGet}>GET</Button>
