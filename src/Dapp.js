@@ -13,22 +13,24 @@ function Dapp() {
   const [inputValue, setInputValue] = useState(0)
 
   useEffect(() => {
-    ;(async () => {
-      if (simpleStorage) {
-        const cb = (from, value) => {
-          toast({
-            position: 'bottom',
-            title: `SET`,
-            description: `set value: ${value} by ${from}`,
-            status: 'success',
-            duration: 10000,
-            isClosable: true,
-          })
-        }
-        simpleStorage.on('StorageSet', cb)
-        return () => simpleStorage.off('StorageSet', cb)
+    if (simpleStorage) {
+      const cb = (from, value) => {
+        toast({
+          position: 'bottom',
+          title: `SET`,
+          description: `set value: ${value} by ${from}`,
+          status: 'success',
+          duration: 10000,
+          isClosable: true,
+        })
       }
-    })()
+      console.log('USEEFFECT CALLED FOR TOAST')
+      simpleStorage.on('StorageSet', cb)
+      return () => {
+        console.log('USEEFFECT CLEANUP FOR TOAST')
+        simpleStorage.off('StorageSet', cb)
+      }
+    }
   }, [simpleStorage, toast])
 
   const handleOnClickGet = async () => {
