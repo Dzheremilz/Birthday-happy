@@ -1,97 +1,102 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { Text, Button, VStack, HStack, Input, useToast } from '@chakra-ui/react'
-import { ethers } from 'ethers'
-import { Web3Context } from 'web3-hooks'
-import { SimpleStorageContext } from './App'
+import React, { useContext, useState } from "react";
+import { Web3Context } from "web3-hooks";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Birthdays from "./components/Birthdays";
+import CreateBirthday from "./components/CreateBirthday";
 
 function Dapp() {
-  const [web3State, login] = useContext(Web3Context)
-  const simpleStorage = useContext(SimpleStorageContext)
-  const toast = useToast()
-
-  const [getValue, setGetValue] = useState(0)
-  const [inputValue, setInputValue] = useState(0)
-
-  useEffect(() => {
-    if (simpleStorage) {
-      const cb = (from, value) => {
-        toast({
-          position: 'bottom',
-          title: `SET`,
-          description: `set value: ${value} by ${from}`,
-          status: 'success',
-          duration: 10000,
-          isClosable: true,
-        })
-      }
-      console.log('USEEFFECT CALLED FOR TOAST')
-      simpleStorage.on('StorageSet', cb)
-      return () => {
-        console.log('USEEFFECT CLEANUP FOR TOAST')
-        simpleStorage.off('StorageSet', cb)
-      }
-    }
-  }, [simpleStorage, toast])
-
-  const handleOnClickGet = async () => {
-    try {
-      const res = await simpleStorage.get()
-      setGetValue(res.toString())
-    } catch (e) {
-      console.log(e.message)
-    }
-  }
-
-  const handleOnClickSet = async () => {
-    console.log('nb listeners:', simpleStorage.listenerCount('StorageSet'))
-    try {
-      const tx = await simpleStorage.set(inputValue)
-
-      const cb = (_from, value) => {
-        setGetValue(value.toString())
-      }
-      const filter = simpleStorage.filters.StorageSet(web3State.account, null)
-
-      // Ecoute une fois event StorageSet
-      simpleStorage.once(filter, cb)
-    } catch (e) {
-      console.log(e.message)
-    }
-  }
+  const [web3State, login] = useContext(Web3Context);
+  const [menu, setMenu] = useState("Menu");
 
   return (
     <>
-      <Text>Web3: {web3State.isWeb3 ? 'injected' : 'no-injected'}</Text>
-      <Text>Network id: {web3State.chainId}</Text>
-      <Text>Network name: {web3State.networkName}</Text>
-      <Text>MetaMask installed: {web3State.isMetaMask ? 'yes' : 'no'}</Text>
-      <Text>logged: {web3State.isLogged ? 'yes' : 'no'}</Text>
-      <Text>{web3State.account}</Text>
-      <Text>Balance: {web3State.balance}</Text>
-      {!web3State.isLogged && (
-        <>
-          <Button onClick={login}>login</Button>
-        </>
-      )}
-      {simpleStorage && web3State.chainId === 4 && (
-        <>
-          <HStack>
-            <Button onClick={handleOnClickGet}>GET</Button>
-            <Text>{getValue}</Text>
-          </HStack>
-          <HStack>
-            <Button onClick={handleOnClickSet}>SET</Button>
-            <Input
-              value={inputValue}
-              onChange={(e) => {
-                setInputValue(e.currentTarget.value)
-              }}
+      <Header />
+      <main
+        className="App min-vh-100 text-center pt-3"
+        style={{ backgroundColor: "#d3dbff", color: "#251f44" }}
+      >
+        {!web3State.isLogged ? (
+          <>
+            <button
+              type="button"
+              className="btn btn-light btn-lg"
+              onClick={login}
+            >
+              login
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="offset-9">
+              <span
+                className="btn"
+                style={{ backgroundColor: "#002395", color: "#FFF" }}
+              >
+                {web3State.networkName}{" "}
+              </span>
+              <span className="btn" style={{ backgroundColor: "#F7F7F7" }}>
+                {web3State.account?.slice(0, 8) + "..."}{" "}
+              </span>
+              <span
+                className="btn"
+                style={{ backgroundColor: "#ED2939", color: "#FFF" }}
+              >
+                {web3State.balance} ETH
+              </span>
+            </div>
+            {web3State.chainId === 4 ? (
+              <>
+                {/*
+            <img
+              src="https://geo.img.pmdstatic.net/fit/https.3A.2F.2Fi.2Epmdstatic.2Enet.2Fgeo.2F2021.2F04.2F21.2F7f9272f7-0c1b-4d61-9af1-045fe3166b46.2Ejpeg/1150x647/background-color/ffffff/quality/70/tout-ce-quil-faut-savoir-sur-le-panda-roux.jpg"
+              className="d-block"
+              alt="..."
             />
-          </HStack>
-        </>
-      )}
+            <img
+              src="https://gurumed-oxn8moh.netdna-ssl.com/wp-content/uploads/2020/02/panda-roux-3-20_thumb.jpg"
+              className="d-block"
+              alt="..."
+            />
+            <img
+              src="https://images.rtl.fr/~r/880v587/rtl/www/1292656-portrait-de-panda-roux.jpg"
+              className="d-block"
+              alt="..."
+            />
+            */}
+                {menu === "Menu" && (
+                  <>
+                    <h2>Menu</h2>
+                    <button
+                      type="button"
+                      className="btn me-5"
+                      style={{ backgroundColor: "#ffe0f7", color: "#251f44" }}
+                      onClick={() => setMenu("Create")}
+                    >
+                      Create Cagnotte
+                    </button>
+                    <button
+                      type="button"
+                      className="btn ms-5"
+                      style={{ backgroundColor: "#251f44", color: "#ffe0f7" }}
+                      onClick={() => setMenu("Check")}
+                    >
+                      Check Cagnotte
+                    </button>
+                  </>
+                )}
+                {menu === "Create" && <CreateBirthday setMenu={setMenu} />}
+                {menu === "Check" && <Birthdays setMenu={setMenu} />}
+              </>
+            ) : (
+              <h2 className="display-1">You need to be on rinkeby</h2>
+            )}
+          </>
+        )}
+      </main>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default Dapp
+export default Dapp;
