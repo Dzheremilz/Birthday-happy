@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useContract, Web3Context } from "web3-hooks";
 import { DeployAddress, DeployAbi } from "../contracts/Deploy";
+import { ethers } from "ethers";
 
 const CreateBirthday = ({ setMenu }) => {
   const deploy = useContract(DeployAddress, DeployAbi);
@@ -13,6 +14,13 @@ const CreateBirthday = ({ setMenu }) => {
   const handleClickCreate = async () => {
     try {
       setLoading(true);
+      console.log(
+        "Birthday Address from getContractAddress:",
+        ethers.utils.getContractAddress({
+          from: DeployAddress,
+          nonce: await web3State.provider.getTransactionCount(DeployAddress),
+        })
+      );
       const tx = await deploy.createBirthday(receiverAddress, date);
       await tx.wait();
       const test = await web3State.provider.getTransactionReceipt(tx.hash);
